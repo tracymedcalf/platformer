@@ -1,0 +1,2 @@
+-- Some utility functions
+-- Great thing about lua is that we can define a function and then add it to the object
