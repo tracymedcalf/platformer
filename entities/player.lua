@@ -85,8 +85,12 @@ function player:update(dt)
 
     self.x, self.y, collisions, len = self.world:move(self,goalX,goalY,self.collisionFilter)
     --self.x, self.y, collisions, len = self.world:move(self,goalX,goalY)
---[[
-	for i, coll in ipairs(collisions) do
+    for _, coll in ipairs(collisions) do
+        if coll.other.isDoor then
+            coll.other:action()
+        end
+    end
+	--[[for i, coll in ipairs(collisions) do
 		if coll.touch.y > goalY then -- We touched below
 			self.hasReachedMax = true
 			self.isGrounded = false
