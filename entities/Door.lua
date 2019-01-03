@@ -26,7 +26,6 @@ function Door:draw()
 end
 
 function Door:action()
-    print('door action')
     if love.keyboard.isDown('up') then
         Gamestate.switch(self.level)
     end
