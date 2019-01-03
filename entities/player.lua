@@ -72,13 +72,15 @@ function player:update(dt)
 	end
 
 	-- Jumping
-	if love.keyboard.isDown('up','w') and self.yVelocity > -self.maxSpeed then
-		self.yVelocity = self.yVelocity - self.acc * dt
-	end--[[elseif love.keyboard.isDown('right','d') and self.yVelocity < self.maxSpeed then
-		self.hasReachedMax = true
-	end--]]
+	if love.keyboard.isDown('up','w') then
+        if self.yVelocity > -self.maxSpeed then
+		    self.yVelocity = self.yVelocity - self.acc * dt
+	    else
+		    self.hasReachedMax = true
+        end
+	end
 
-	self.isGrounded = false
+	--self.isGrounded = false
 
     local goalX = self.x + self.xVelocity
     local goalY = self.y + self.yVelocity

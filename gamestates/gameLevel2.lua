@@ -7,6 +7,8 @@ local Entities = require 'entities.Entities'
 local Player = require 'entities.player'
 local Ground = require 'entities.ground'
 local Level = require 'gamestates.Level'
+local background = require 'backgrounds.clock'
+
 local gameLevel2 = Class{
 __includes = Level
 }
@@ -22,7 +24,7 @@ function gameLevel2:enter()
 	local ground_0 = Ground(world,110,400,'assets/green_grass.png',3)
 	local ground_1 = Ground(world,0,300,'assets/dirt.png',2)
     
-	Entities:addMany({player,ground_0,ground_1})
+	Entities:addMany({background,player,ground_0,ground_1})
 
 end
 
