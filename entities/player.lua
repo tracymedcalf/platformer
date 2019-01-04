@@ -73,27 +73,22 @@ function player:update(dt)
 
 	-- Jumping
 	if love.keyboard.isDown('up','w') then
-        if self.yVelocity > -self.maxSpeed then
-		    self.yVelocity = self.yVelocity - self.acc * dt
-	    else
+        if -self.yVelocity < self.jumpMaxSpeed and not self.hasReachedMax then
+		    self.yVelocity = self.yVelocity - self.jumpAcc * dt
+	    elseif math.abs(self.yVelocity) >= self.jumpMaxSpeed then
 		    self.hasReachedMax = true
         end
+	    self.isGrounded = false
 	end
-
-	--self.isGrounded = false
 
     local goalX = self.x + self.xVelocity
     local goalY = self.y + self.yVelocity
 
     self.x, self.y, collisions, len = self.world:move(self,goalX,goalY,self.collisionFilter)
-    --self.x, self.y, collisions, len = self.world:move(self,goalX,goalY)
     for _, coll in ipairs(collisions) do
         if coll.other.isDoor then
             coll.other:action()
-        end
-    end
-	--[[for i, coll in ipairs(collisions) do
-		if coll.touch.y > goalY then -- We touched below
+		elseif coll.touch.y > goalY then -- We touched below
 			self.hasReachedMax = true
 			self.isGrounded = false
 		elseif coll.normal.y < 0 then
