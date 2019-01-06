@@ -1,23 +1,21 @@
-
 local Class = require 'hump.class'
 local Entity = require 'entities.Entity'
 
-local player = Class{
-	__includes = Entity, -- player class inherits Entity
+local enemy = Class{
+	__includes = Entity, -- enemy class inherits Entity
     height = 20,
     width = 20,
 }
 
-function player:getHeight()
+function enemy:getHeight()
     return self.height
 end
 
-function player:getWidth()
+function enemy:getWidth()
     return self.width
 end
 
-function player:init(world,x,y)
-	--self.img = love.graphics.newImage('/assets/character_block.png')
+function enemy:init(world,x,y)
 	
 	Entity.init(self,world,x,y,self:getWidth(),self:getHeight())
 
@@ -37,24 +35,24 @@ function player:init(world,x,y)
 	self.world:add(self,self:getRect())
 end
 --[[
-function player:collisionFilter(other)
+function enemy:collisionFilter(other)
 	local x,y,w,h = self.world:getRect(other)
-	local :playerBottom = self.y + self.h
+	local :enemyBottom = self.y + self.h
 	local otherBottom = y + h
 
-	if playerBottom <= y then
+	if enemyBottom <= y then
 		return 'slide'
 	end
 end--]]
 
-function player:collisionFilter(other)
+function enemy:collisionFilter(other)
     if other.isDoor then
         return 'cross'
     end
     return 'slide'
 end
 
-function player:update(dt)
+function enemy:update(dt)
 	local prevX, prevY = self.x, self.y
 	
 	-- Friction
@@ -97,10 +95,10 @@ function player:update(dt)
 	end--]]
 end
 
-function player:draw()
+function enemy:draw()
 	love.graphics.rectangle('fill',self.x,self.y,self:getHeight(),self:getWidth())
     --love.graphics.draw(self.img,self.x,self.y)
 end
 
-return player
+return enemy
 
