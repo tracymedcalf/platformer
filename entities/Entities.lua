@@ -47,12 +47,14 @@ function Entities:clear()
 end
 
 function Entities:draw()
+    self.camera:attach()
 	for i, e in ipairs(self.entityList) do
 		e:draw(i)
 	end
     for i, e in ipairs(self.foreground) do
         e:draw(i)
     end
+    self.camera:detach()
 end
 
 function Entities:update(dt)

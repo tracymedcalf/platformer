@@ -9,6 +9,7 @@ local Ground = require 'entities.ground'
 local Level = require 'gamestates.Level'
 local Door = require 'entities.Door'
 local gameLevel2 = require 'gamestates.gameLevel2'
+local Building = require 'entities.Building'
 
 local gameLevel1 = Class{
 __includes = Level
@@ -16,16 +17,38 @@ __includes = Level
 
 player = nil
 world = nil
+---[[
+function genBuildings(world)
+    local bottom = 1000
+    local buildings = {Building(world,-10,1000,1000,10)}
+    math.randomseed(os.time())
+    local w = 100
+    for i=1,10,1 do
+        local top = bottom
+        for j=1,10,1 do
+            local x = i * w
+            local h = math.random(40,140)
+            table.insert(buildings,Building(world,x,top-h,w,h))
+            top = top - h
+        end
+    end
+    return buildings
+end--]]
+--[[
+function genBuildings(world)
+    local buildings = {Building(world,-10,1000,1000,10)}
+    for 
+    math.randomseed(os.time())
+    --]]
 
 function gameLevel1:enter()
     self.Entities = Entities
 	world = bump.newWorld(16)
 	Entities:enter()
 	player = Player(world,16,16)
-	local ground_0 = Ground(world,120,360,'assets/green_grass.png',2)
-	local ground_1 = Ground(world,0,448,'assets/dirt.png',2)
-    local door_1 = Door(world,10,448,gameLevel2)
-	Entities:addMany({ground_0,ground_1,door_1,player})
+	Entities:add(player)
+    Entities.camera = player.camera
+    Entities:addMany(genBuildings(world))
 end
 
 return gameLevel1
