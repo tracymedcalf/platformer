@@ -2,6 +2,7 @@
 local Class = require 'hump.class'
 local Entity = require 'entities.Entity'
 local Camera = require 'hump.camera'
+local WizardMode = require 'playerModes.wizard'
 
 local player = Class{
 	__includes = Entity, -- player class inherits Entity
@@ -37,6 +38,8 @@ function player:init(world,x,y)
 	self.world:add(self,self:getRect())
     self.camera = Camera(self.x,self.y)
     self.climbing = false
+    self.climbMode = false
+    self.modeFilter = WizardMode.collisionFilter
 end
 --[[
 function player:collisionFilter(other)
@@ -52,12 +55,11 @@ end--]]
 function player:cameraUpdate()
     self.camera:lookAt(self.x,self.y)
 end
-
-function player:collisionFilter(other)
+function player:collisionFilter(other) 
     if other.isDoor then
         return 'cross'
     end
-    return 'slide'
+    return self.modeFilter(self,other)
 end
 
 function player:climbingUpdate(dt)
@@ -98,13 +100,16 @@ function player:update(dt)
         self.isClimbing = false
     end
 
+    if love.keyboard.isDown('e') then
+        self.climbMode = not self.climbMode
+    end
     local goalX = self.x + self.xVelocity
     local goalY = self.y + self.yVelocity
     self.x, self.y, collisions, len = self.world:move(self,goalX,goalY,self.collisionFilter)
     for _, coll in ipairs(collisions) do
         if coll.other.isDoor then
             coll.other:action()
-		elseif coll.normal.x ~= 0 then -- coll.other.isBuilding
+		elseif self.climbMode and coll.normal.x ~= 0 then -- coll.other.isBuilding
             self.isClimbing = true
         --[[elseif coll.touch.y > goalY then -- We touched below
 			self.hasReachedMax = true

@@ -46,9 +46,9 @@ function gameLevel1:enter()
 	world = bump.newWorld(16)
 	Entities:enter()
 	player = Player(world,16,16)
-	Entities:add(player)
     Entities.camera = player.camera
     Entities:addMany(genBuildings(world))
+	Entities:add(player)
 end
 
 return gameLevel1
